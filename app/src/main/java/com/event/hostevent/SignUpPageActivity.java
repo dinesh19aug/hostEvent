@@ -1,13 +1,72 @@
 package com.event.hostevent;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-public class SignUpPageActivity extends AppCompatActivity {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class SignUpPageActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private FirebaseAuth mAuth;
+    private static String TAG = "SignUpPageActivity";
+    private Button signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_page);
+        mAuth = FirebaseAuth.getInstance();
+        setUpSignUp();
+    }
+
+    private void setUpSignUp() {
+        signUpButton = (Button) findViewById(R.id.b_signUp);
+        signUpButton.setOnClickListener(this);
+    }
+
+    private void createAccount(String email, String password) {
+        Log.d(TAG, "createAccount:" + email);
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                        } else {
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(SignUpPageActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.b_signUp){
+            Log.d(TAG,"Sign Up Button Clicked");
+            String emailId = ((EditText)findViewById(R.id.t_emailId)).getText().toString();
+            String password =((EditText) findViewById(R.id.t_passowrd)).getText().toString();
+            createAccount(emailId,password);
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

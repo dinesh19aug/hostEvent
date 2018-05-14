@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginButton.setOnClickListener(this);
     }
 
-    private void createAccount(String email, String password) {
+    /*private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-    }
+    }*/
 
 
     private void signOut() {
@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditText emailId = findViewById(R.id.field_email);
         EditText password = findViewById(R.id.field_password);
         if (i == R.id.email_create_account_button) {
-            Intent loginIntent;
-            loginIntent = new Intent(getApplicationContext(), SignUpPageActivity.class);
-            startActivity(loginIntent);
+            Intent createAccountIntent;
+            createAccountIntent = new Intent(getApplicationContext(), SignUpPageActivity.class);
+            startActivity(createAccountIntent);
 
             //createAccount(emailId.getText().toString(), password.getText().toString());
         } else if (i == R.id.email_sign_in_button) {
