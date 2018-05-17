@@ -7,12 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -49,29 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginButton = (Button) findViewById(R.id.email_sign_in_button);
         loginButton.setOnClickListener(this);
     }
-
-    /*private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }*/
-
 
     private void signOut() {
         mAuth.signOut();
@@ -111,14 +86,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View v) {
         int i = v.getId();
-        EditText emailId = findViewById(R.id.field_email);
-        EditText password = findViewById(R.id.field_password);
         if (i == R.id.email_create_account_button) {
             Intent createAccountIntent;
             createAccountIntent = new Intent(getApplicationContext(), SignUpPageActivity.class);
             startActivity(createAccountIntent);
 
-            //createAccount(emailId.getText().toString(), password.getText().toString());
+
         } else if (i == R.id.email_sign_in_button) {
             Intent loginIntent;
             loginIntent = new Intent(getApplicationContext(), LoginPageActivity.class);
