@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.event.hostevent.dao.UserDao;
+import com.event.hostevent.vo.Event;
+import com.event.hostevent.vo.Invitee;
+import com.event.hostevent.vo.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -18,8 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SignUpPageActivity extends AppCompatActivity implements View.OnClickListener{
@@ -37,6 +46,11 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_sign_up_page);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
+
         setUpSignUp();
     }
 
@@ -45,50 +59,7 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
         signUpButton.setOnClickListener(this);
     }
 
-    private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            saveRecord();
 
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpPageActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-    }
-
-    private void saveRecord() {
-        Map<String, Object> user = new HashMap<>();
-        user.put("First_Name", "Ada");
-        user.put("Last_Name", "Lovelace");
-        user.put("Phone_Number", 1815);
-        user.put("Email_Id", "dinesh@gmail.com");
-
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-
-    }
 
 
     @Override
@@ -97,9 +68,18 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
             Log.d(TAG,"Sign Up Button Clicked");
             String emailId = ((EditText)findViewById(R.id.t_emailId)).getText().toString();
             String password =((EditText) findViewById(R.id.t_passowrd)).getText().toString();
-            createAccount(emailId,password);
+            String phoneNumber = ((EditText) findViewById(R.id.t_phone_number)).getText().toString();
+            String firstName = ((EditText) findViewById(R.id.t_first_name)).getText().toString();
+            String lastName = ((EditText) findViewById(R.id.t_last_name)).getText().toString();
+            User user = new User(firstName,lastName,phoneNumber,emailId);
+            UserDao userDao = new UserDao();
+            userDao.createAccount(this,user, password, mAuth,db);
+
+
         }
     }
+
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
