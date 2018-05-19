@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class UserDao {
     private static String TAG = "UserDao";
 
-    public void createAccount(final SignUpPageActivity signUpPageActivity, final User user, final String password, final FirebaseAuth mAuth, final FirebaseFirestore db) {
+    public boolean createAccount(final SignUpPageActivity signUpPageActivity, final User user, final String password, final FirebaseAuth mAuth, final FirebaseFirestore db) {
         Log.d(TAG, "createAccount:" + user.getEmail_address());
         final boolean[] isSuccessful = new boolean[1];
         mAuth.createUserWithEmailAndPassword(user.getEmail_address(), password)
@@ -31,14 +31,16 @@ public class UserDao {
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             saveRecord(user,db);
                             showToast(signUpPageActivity, "Account Created.");
+                            isSuccessful[0] = true;
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             showToast(signUpPageActivity, "Authentication failed.");
+                            isSuccessful[0] = false;
                         }
                     }
                 });
 
-
+    return isSuccessful[0];
     }
 
     private void showToast(SignUpPageActivity signUpPageActivity, String message) {

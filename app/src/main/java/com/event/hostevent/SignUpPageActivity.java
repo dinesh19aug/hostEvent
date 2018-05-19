@@ -66,19 +66,25 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if(v.getId()==R.id.b_signUp){
             Log.d(TAG,"Sign Up Button Clicked");
-            String emailId = ((EditText)findViewById(R.id.t_emailId)).getText().toString();
             String password =((EditText) findViewById(R.id.t_passowrd)).getText().toString();
-            String phoneNumber = ((EditText) findViewById(R.id.t_phone_number)).getText().toString();
-            String firstName = ((EditText) findViewById(R.id.t_first_name)).getText().toString();
-            String lastName = ((EditText) findViewById(R.id.t_last_name)).getText().toString();
-            User user = new User(firstName,lastName,phoneNumber,emailId);
-            UserDao userDao = new UserDao();
-            userDao.createAccount(this,user, password, mAuth,db);
-
+            User user = createUserObject();
+            boolean isAccountCreated = createAccount(user, password);
 
         }
     }
+    private User createUserObject(){
+        String emailId = ((EditText)findViewById(R.id.t_emailId)).getText().toString();
+        String phoneNumber = ((EditText) findViewById(R.id.t_phone_number)).getText().toString();
+        String firstName = ((EditText) findViewById(R.id.t_first_name)).getText().toString();
+        String lastName = ((EditText) findViewById(R.id.t_last_name)).getText().toString();
+        User user = new User(firstName,lastName,phoneNumber,emailId);
+        return user;
+    }
 
+    private boolean createAccount(User user, String password) {
+        UserDao userDao = new UserDao();
+        return userDao.createAccount(this,user, password, mAuth,db);
+    }
 
 
     @Override
