@@ -10,15 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.event.hostevent.LoginPageActivity;
 import com.event.hostevent.R;
 import com.event.hostevent.SignUpPageActivity;
+import com.event.hostevent.util.LoginPageUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,8 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginPage extends Fragment implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
-    private Button loginButton;
-    private Button signUpButton;
+    private Button loginButton, signUpButton;
+    private TextView emailId, password;
     private static String TAG = "LoginPage";
     public LoginPage() {
         // Required empty public constructor
@@ -71,6 +75,8 @@ public class LoginPage extends Fragment implements View.OnClickListener{
 
     private void setUpLogin() {
         loginButton = getView().findViewById(R.id.email_sign_in_button);
+        emailId = getView().findViewById(R.id.field_email);
+        password = getView().findViewById(R.id.field_password);
         loginButton.setOnClickListener(this);
     }
 
@@ -108,7 +114,7 @@ public class LoginPage extends Fragment implements View.OnClickListener{
                         // [END_EXCLUDE]
                     }
                 });
-        // [END send_email_verification]
+
     }
     @Override
     public void onClick(View v) {
@@ -121,9 +127,14 @@ public class LoginPage extends Fragment implements View.OnClickListener{
 
         } else if (i == R.id.email_sign_in_button) {
             Intent loginIntent;
-            loginIntent = new Intent(getContext().getApplicationContext(), LoginPageActivity.class);
-            startActivity(loginIntent);
-            //signIn(emailId.getText().toString(), password.getText().toString());
+            List<String> faultCodes = LoginPageUtil.validate(emailId.getText().toString(), password.getText().toString());
+            if(faultCodes.size()==0) {
+                loginIntent = new Intent(getContext().getApplicationContext(), LoginPageActivity.class);
+                startActivity(loginIntent);
+            }else{
+                LoginPageUtil.createAndShowToast(getContext(),faultCodes);
+            }
+
         } else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.verify_email_button) {
