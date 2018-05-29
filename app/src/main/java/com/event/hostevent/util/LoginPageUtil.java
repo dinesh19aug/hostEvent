@@ -10,14 +10,13 @@ import java.util.List;
 
 public class LoginPageUtil {
     private static final String EMPTY_FIELDS = "EMPTY_FIELDS";
-    private static HashMap<String, String> errorMap = new HashMap<>();
 
 
     public static List<String>  validate(String emailId, String password){
         List <String> faultCode = new ArrayList<>();
         if(isFieldEmpty(emailId, password)){
             faultCode.add(EMPTY_FIELDS);
-            errorMap.put(EMPTY_FIELDS,"Email or Password field is empty");
+
         }
         return faultCode;
     }
@@ -32,7 +31,7 @@ public class LoginPageUtil {
     public static void createAndShowToast(Context context, List<String> faultCodes) {
         String errorText=null;
         if(faultCodes.get(0).equalsIgnoreCase(EMPTY_FIELDS)){
-            errorText = errorMap.get(EMPTY_FIELDS);
+            errorText = EnumErrorCode.EMPTY_FIELDS.getErrorDesc();
         }
 
         Toast.makeText(context,errorText, Toast.LENGTH_LONG).show();
