@@ -127,14 +127,7 @@ public class LoginPage extends Fragment implements View.OnClickListener{
 
         } else if (i == R.id.email_sign_in_button) {
             Intent loginIntent;
-            List<String> faultCodes = LoginPageUtil.validate(emailId.getText().toString(), password.getText().toString());
-            if(faultCodes.size()==0) {
-                loginIntent = new Intent(getContext().getApplicationContext(), LoginPageActivity.class);
-                startActivity(loginIntent);
-            }else{
-                LoginPageUtil.createAndShowToast(getContext(),faultCodes);
-            }
-
+            LoginPageUtil.login(emailId.getText().toString(), password.getText().toString(),mAuth, getContext());
         } else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.verify_email_button) {
