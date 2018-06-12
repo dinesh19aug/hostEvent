@@ -89,4 +89,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup_err_email">Please enter valid email address</string>
+    <string name="signup_invalid_fname">Enter valid first name</string>
+    <string name="signup_invalid_lname">Enter valid last name</string>
+    <string name="signup_invalid_phone">Enter valid phone number</string>
 </resources>
