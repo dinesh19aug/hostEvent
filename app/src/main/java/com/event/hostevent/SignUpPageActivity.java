@@ -1,6 +1,8 @@
 package com.event.hostevent;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.event.hostevent.dao.UserDao;
+import com.event.hostevent.fragments.LoginPage;
+import com.event.hostevent.fragments.SignUp;
 import com.event.hostevent.vo.Event;
 import com.event.hostevent.vo.Invitee;
 import com.event.hostevent.vo.User;
@@ -33,62 +37,35 @@ import java.util.Map;
 
 public class SignUpPageActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private FirebaseAuth mAuth;
 
     private static String TAG = "SignUpPageActivity";
-    private Button signUpButton;
 
 
-    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_page);
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        db.setFirestoreSettings(settings);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.frameLayout,new SignUp());
+        ft.commit();
 
-        setUpSignUp();
     }
-
-    private void setUpSignUp() {
-        signUpButton = (Button) findViewById(R.id.b_signUp);
-        signUpButton.setOnClickListener(this);
-    }
-
-
-
 
     @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.b_signUp){
-            Log.d(TAG,"Sign Up Button Clicked");
-            String password =((EditText) findViewById(R.id.t_passowrd)).getText().toString();
-            User user = createUserObject();
-            boolean isAccountCreated = createAccount(user, password);
-
-        }
+    public void onStart() {
+        super.onStart();
     }
-    private User createUserObject(){
-        String emailId = ((EditText)findViewById(R.id.t_emailId)).getText().toString();
-        String phoneNumber = ((EditText) findViewById(R.id.t_phone_number)).getText().toString();
-        String firstName = ((EditText) findViewById(R.id.t_first_name)).getText().toString();
-        String lastName = ((EditText) findViewById(R.id.t_last_name)).getText().toString();
-        User user = new User(firstName,lastName,phoneNumber,emailId);
-        return user;
-    }
-
-    private boolean createAccount(User user, String password) {
-        UserDao userDao = new UserDao();
-        return userDao.createAccount(this,user, password, mAuth,db);
-    }
-
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+    public void onClick(View v) {
+        int i = v.getId();
+
+    }
+
+
 }
