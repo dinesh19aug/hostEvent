@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import java.util.regex.Pattern;
+
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
@@ -32,7 +35,7 @@ public class SignUp extends Fragment implements View.OnClickListener{
     private Button signUpButton;
     private FirebaseFirestore db;
     private static String TAG = "SignUp";
-    EditText emailIdField, phoneNumberText, firstNameText, lastNameText, passwordText;
+    EditText emailIdField, phoneNumberText, firstNameText, lastNameText, passwordText, repasswordText;
 
     AwesomeValidation mAwesomeValidation;
     public SignUp() {
@@ -96,6 +99,7 @@ public class SignUp extends Fragment implements View.OnClickListener{
          firstNameText = getView().findViewById(R.id.t_first_name);
          lastNameText = getView().findViewById(R.id.t_last_name);
          passwordText = getView().findViewById(R.id.t_passowrd);
+         repasswordText = getView().findViewById(R.id.t_repassowrd);
         validateFields();
     }
 
@@ -103,9 +107,10 @@ public class SignUp extends Fragment implements View.OnClickListener{
         mAwesomeValidation.addValidation(getActivity(),R.id.t_emailId,android.util.Patterns.EMAIL_ADDRESS, R.string.signup_err_email);
         mAwesomeValidation.addValidation(getActivity(), R.id.t_first_name, RegexTemplate.NOT_EMPTY, R.string.signup_invalid_fname);
         mAwesomeValidation.addValidation(getActivity(), R.id.t_last_name, RegexTemplate.NOT_EMPTY, R.string.signup_invalid_lname);
-        mAwesomeValidation.addValidation(getActivity(), R.id.t_phone_number, RegexTemplate.TELEPHONE, R.string.signup_invalid_phone);
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{4,}$";
-        mAwesomeValidation.addValidation(getActivity(), R.id.t_passowrd, passwordRegex, R.string.signup_invalid_lname);
+        mAwesomeValidation.addValidation(getActivity(), R.id.t_phone_number, "^[0-9]{10}", R.string.signup_invalid_phone);
+        String passwordRegex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
+        mAwesomeValidation.addValidation(getActivity(), R.id.t_passowrd, passwordRegex, R.string.signup_invalid_pwd);
+        mAwesomeValidation.addValidation(getActivity(),R.id.t_repassowrd,R.id.t_passowrd,R.string.signup_pwd_not_match);
     }
 
     private User createUserObject(){

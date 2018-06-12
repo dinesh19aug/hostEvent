@@ -93,4 +93,6 @@
     <string name="signup_invalid_fname">Enter valid first name</string>
     <string name="signup_invalid_lname">Enter valid last name</string>
     <string name="signup_invalid_phone">Enter valid phone number</string>
+    <string name="signup_invalid_pwd">Must contain a capital, a numbr and a special char</string>
+    <string name="signup_pwd_not_match">Re-enter password does not match</string>
 </resources>
