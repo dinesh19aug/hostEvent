@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.event.hostevent.LoginPageActivity;
+import com.event.hostevent.LandingPageActivity;
 import com.event.hostevent.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -93,7 +93,7 @@ public class LoginPageUtil {
 
     private static void startLoginAvtivity(Context context) {
         Intent loginIntent;
-        loginIntent = new Intent(context.getApplicationContext(), LoginPageActivity.class);
+        loginIntent = new Intent(context.getApplicationContext(), LandingPageActivity.class);
         context.startActivity(loginIntent);
     }
 
