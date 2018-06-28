@@ -92,9 +92,9 @@ public class LoginPageUtil {
     }
 
     private static void startLoginAvtivity(Context context) {
-        Intent loginIntent;
-        loginIntent = new Intent(context.getApplicationContext(), LandingPageActivity.class);
-        context.startActivity(loginIntent);
+        Intent landingPageIntent;
+        landingPageIntent = new Intent(context.getApplicationContext(), LandingPageActivity.class);
+        context.startActivity(landingPageIntent);
     }
 
     private static boolean isAnEmailAddress(String emailId) {

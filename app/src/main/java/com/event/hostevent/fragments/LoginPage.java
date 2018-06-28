@@ -123,7 +123,6 @@ public class LoginPage extends Fragment implements View.OnClickListener{
 
 
         } else if (i == R.id.email_sign_in_button) {
-            Intent loginIntent;
             LoginPageUtil.login(emailId.getText().toString(), password.getText().toString(),mAuth, getContext());
         } else if (i == R.id.sign_out_button) {
             signOut();
